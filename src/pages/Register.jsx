@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import api from '../api/axios'
 
 function Register() {
   const [step, setStep] = useState(1) // 1=email, 2=username+password
@@ -17,54 +18,47 @@ function Register() {
   }
 
  const handleRegister = async () => {
-    if (!form.username || !form.password || !form.confirm) {
-      setError("Barcha maydonlarni to'ldiring!"); return
-    }
-    if (form.password !== form.confirm) {
-      setError("Parollar mos kelmadi!"); return
-    }
-    if (form.password.length < 6) {
-      setError("Parol kamida 6 ta belgi bo'lishi kerak!"); return
-    }
-    setLoading(true)
-    setError('')
-    try {
-      // 1. Register
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: form.username,
-          email: form.email,
-          password: form.password
-        })
-      })
-      const data = await res.json()
-      if (!res.ok) {
-        setError(data.message || 'Xatolik yuz berdi')
-        setLoading(false)
-        return
-      }
-
-      // 2. Avtomatik login
-      const loginRes = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: form.email,
-          password: form.password
-        })
-      })
-      const loginData = await loginRes.json()
-      localStorage.setItem('token', loginData.token)
-      localStorage.setItem('user', JSON.stringify(loginData.user))
-      navigate('/dashboard')
-
-    } catch (err) {
-      setError("Server bilan bog'lanishda xatolik!")
-      setLoading(false)
-    }
+  if (!form.username || !form.password || !form.confirm) {
+    setError("Barcha maydonlarni to'ldiring!");
+    return;
   }
+  if (form.password !== form.confirm) {
+    setError("Parollar mos kelmadi!");
+    return;
+  }
+  if (form.password.length < 6) {
+    setError("Parol kamida 6 ta belgi bo'lishi kerak!");
+    return;
+  }
+
+  setLoading(true);
+  setError('');
+
+  try {
+    // ✅ 1. REGISTER (axios bilan)
+    await api.post('/auth/register', {
+      username: form.username,
+      email: form.email,
+      password: form.password,
+    });
+
+    // ✅ 2. LOGIN (axios bilan)
+    const loginRes = await api.post('/auth/login', {
+      email: form.email,
+      password: form.password,
+    });
+
+    // ✅ TOKEN SAQLASH
+    localStorage.setItem('token', loginRes.data.token);
+    localStorage.setItem('user', JSON.stringify(loginRes.data.user));
+
+    navigate('/dashboard');
+  } catch (err) {
+    setError(err.response?.data?.message || "Server bilan bog'lanishda xatolik!");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
