@@ -88,15 +88,15 @@ function Stats() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-white border border-gray-100 p-5 rounded-2xl shadow-sm">
             <p className="text-gray-500 text-xs font-medium uppercase">Umumiy Daromad</p>
-            <p className="text-2xl font-bold text-emerald-600 mt-1">+${totalIncome.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-emerald-600 mt-1">+{totalIncome.toLocaleString()} so'm</p>
           </div>
           <div className="bg-white border border-gray-100 p-5 rounded-2xl shadow-sm">
             <p className="text-gray-500 text-xs font-medium uppercase">Umumiy Xarajat</p>
-            <p className="text-2xl font-bold text-red-500 mt-1">-${totalExpense.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-red-500 mt-1">-{totalExpense.toLocaleString()} so'm</p>
           </div>
           <div className="bg-blue-600 p-5 rounded-2xl shadow-lg shadow-blue-100">
             <p className="text-blue-100 text-xs font-medium uppercase">Joriy Balans</p>
-            <p className="text-2xl font-bold text-white mt-1">${balance.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-white mt-1">{balance.toLocaleString()} so'm</p>
           </div>
         </div>
 
@@ -213,7 +213,7 @@ function Stats() {
                         {t.description || <span className="text-gray-300">—</span>}
                       </td>
                       <td className={`py-2.5 px-2 text-right font-bold ${t.type === 'income' ? 'text-emerald-600' : 'text-red-500'}`}>
-                        {t.type === 'income' ? '+' : '-'}${t.amount.toLocaleString()}
+                        {t.type === 'income' ? '+' : '-'}{t.amount.toLocaleString()} so'm
                       </td>
                       <td className="py-2.5 px-2 text-right">
                         <span className={`text-xs px-2 py-0.5 rounded-full ${t.type === 'income' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-500'}`}>
