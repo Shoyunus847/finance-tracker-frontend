@@ -5,7 +5,7 @@ function Dashboard() {
   const [transactions, setTransactions] = useState([])
   const [stats, setStats] = useState({ income: 0, expense: 0 })
   const [loading, setLoading] = useState(true)
-  const [goal, setGoal] = useState(() => Number(localStorage.getItem('savings_goal')) || 1000)
+  const [goal, setGoal] = useState(() => Number(localStorage.getItem('savings_goal')) || 1000000)
   const [editGoal, setEditGoal] = useState(false)
   const [goalInput, setGoalInput] = useState('')
 
@@ -36,12 +36,10 @@ function Dashboard() {
   const savingsRate = stats.income > 0 ? ((totalBalance / stats.income) * 100).toFixed(1) : 0
   const goalProgress = Math.min((totalBalance / goal) * 100, 100).toFixed(0)
 
-  // Eng katta xarajat
   const biggestExpense = transactions
     .filter(t => t.type === 'expense')
     .sort((a, b) => b.amount - a.amount)[0]
 
-  // Eng katta daromad
   const biggestIncome = transactions
     .filter(t => t.type === 'income')
     .sort((a, b) => b.amount - a.amount)[0]
@@ -64,7 +62,7 @@ function Dashboard() {
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">👋 Welcome back!</h1>
+            <h1 className="text-2xl font-bold text-gray-800">👋 Xush kelibsiz!</h1>
             <p className="text-gray-400 mt-1 text-sm">Sizning moliyaviy holatingiz tahlili</p>
           </div>
           <div className="text-right">
@@ -77,17 +75,17 @@ function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-white border border-gray-100 p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
             <p className="text-gray-500 text-xs font-medium uppercase">Umumiy Daromad</p>
-            <p className="text-2xl font-bold text-emerald-600 mt-1">+${stats.income.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-emerald-600 mt-1">+{stats.income.toLocaleString()} so'm</p>
             <p className="text-xs text-gray-400 mt-1">{transactions.filter(t => t.type === 'income').length} ta tranzaksiya</p>
           </div>
           <div className="bg-white border border-gray-100 p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
             <p className="text-gray-500 text-xs font-medium uppercase">Umumiy Xarajat</p>
-            <p className="text-2xl font-bold text-red-500 mt-1">-${stats.expense.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-red-500 mt-1">-{stats.expense.toLocaleString()} so'm</p>
             <p className="text-xs text-gray-400 mt-1">{transactions.filter(t => t.type === 'expense').length} ta tranzaksiya</p>
           </div>
           <div className="bg-blue-600 p-5 rounded-2xl shadow-lg shadow-blue-100">
             <p className="text-blue-100 text-xs font-medium uppercase">Joriy Balans</p>
-            <p className="text-2xl font-bold text-white mt-1">${totalBalance.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-white mt-1">{totalBalance.toLocaleString()} so'm</p>
             <p className="text-xs text-blue-200 mt-1">Jami {transactions.length} ta tranzaksiya</p>
           </div>
         </div>
@@ -106,7 +104,7 @@ function Dashboard() {
                     <p className="text-xs text-gray-400">{new Date(t.date).toLocaleDateString('uz-UZ')}</p>
                   </div>
                   <p className={`text-sm font-bold ${t.type === 'income' ? 'text-emerald-500' : 'text-red-400'}`}>
-                    {t.type === 'income' ? '+' : '-'}${t.amount.toLocaleString()}
+                    {t.type === 'income' ? '+' : '-'}{t.amount.toLocaleString()} so'm
                   </p>
                 </div>
               ))}
@@ -116,7 +114,7 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* Eng katta daromad va xarajat */}
+          {/* Rekordlar */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-base font-semibold text-gray-800 mb-4">Rekordlar 🏆</h2>
             <div className="space-y-4">
@@ -125,7 +123,7 @@ function Dashboard() {
                 {biggestIncome ? (
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium text-gray-700">{biggestIncome.title}</p>
-                    <p className="text-lg font-bold text-emerald-600">+${biggestIncome.amount.toLocaleString()}</p>
+                    <p className="text-lg font-bold text-emerald-600">+{biggestIncome.amount.toLocaleString()} so'm</p>
                   </div>
                 ) : (
                   <p className="text-gray-400 text-sm">Ma'lumot yo'q</p>
@@ -136,7 +134,7 @@ function Dashboard() {
                 {biggestExpense ? (
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium text-gray-700">{biggestExpense.title}</p>
-                    <p className="text-lg font-bold text-red-500">-${biggestExpense.amount.toLocaleString()}</p>
+                    <p className="text-lg font-bold text-red-500">-{biggestExpense.amount.toLocaleString()} so'm</p>
                   </div>
                 ) : (
                   <p className="text-gray-400 text-sm">Ma'lumot yo'q</p>
@@ -167,7 +165,7 @@ function Dashboard() {
                   className="border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-100 flex-1"
                   value={goalInput}
                   onChange={e => setGoalInput(e.target.value)}
-                  placeholder="Maqsad summasi"
+                  placeholder="Maqsad summasi (so'm)"
                 />
                 <button onClick={saveGoal} className="bg-blue-600 text-white text-sm rounded-xl px-4 py-2">
                   Saqlash
@@ -176,7 +174,7 @@ function Dashboard() {
             )}
             <div className="mb-2 flex justify-between text-sm">
               <span className="text-gray-500">Joriy balans</span>
-              <span className="font-bold text-gray-800">${totalBalance.toLocaleString()} / ${goal.toLocaleString()}</span>
+              <span className="font-bold text-gray-800">{totalBalance.toLocaleString()} / {goal.toLocaleString()} so'm</span>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-4">
               <div
@@ -190,12 +188,12 @@ function Dashboard() {
           </div>
 
           {/* Maslahat */}
-          <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-6 text-white relative overflow-hidden">
+          <div className=" from-indigo-500 to-purple-600 rounded-2xl p-6 text-white relative overflow-hidden">
             <div className="relative z-10">
               <h3 className="font-bold text-lg">Aqlli maslahat 💡</h3>
               <p className="text-indigo-100 text-sm mt-2">
                 {totalBalance > 0
-                  ? `Sizda $${totalBalance.toLocaleString()} ijobiy balans bor! Mablag'ingizning 20% qismini investitsiyaga yo'naltirishni ko'rib chiqing.`
+                  ? `Sizda ${totalBalance.toLocaleString()} so'm ijobiy balans bor! Mablag'ingizning 20% qismini investitsiyaga yo'naltirishни ko'rib chiqing.`
                   : "Xarajatlaringiz daromaddan oshib ketmoqda. Keraksiz xarajatlarni kamaytiring!"}
               </p>
               {transactions.length > 0 && (
