@@ -1,10 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://finans-backend.vercel.app/api",
+  baseURL: "/api",
 });
 
-// REQUEST interceptor (token qo‘shadi)
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -13,7 +12,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// RESPONSE interceptor (401 bo‘lsa logout)
 api.interceptors.response.use(
   (res) => res,
   (err) => {
